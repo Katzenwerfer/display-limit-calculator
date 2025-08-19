@@ -13,22 +13,22 @@ double get_display_refresh_rate()
     return refresh_rate;
 }
 
-double five_percent_limit(double refresh_rate)
+constexpr double five_percent_limit(const double &refresh_rate)
 {
     return refresh_rate * 0.95;
 }
 
-double reflex_formula_limit(double refresh_rate)
+constexpr double reflex_formula_limit(const double &refresh_rate)
 {
     return refresh_rate - (refresh_rate * refresh_rate) / 3600.0;
 }
 
-double vrr_formula_limit(double reflex_fps)
+constexpr double vrr_formula_limit(const double &reflex_fps)
 {
     return reflex_fps * 0.995;
 }
 
-void print_row(std::string label, double value, std::array<int, 4> width)
+void print_row(const std::string &label, const double &value, const std::array<int, 4> &width)
 {
     std::cout << std::setw(width[0]) << (label + " |");
     std::cout << std::setw(width[1] - 2) << static_cast<int>(value) << " |";
@@ -39,20 +39,20 @@ void print_row(std::string label, double value, std::array<int, 4> width)
 
 int main()
 {
-    double refresh_rate = get_display_refresh_rate();
+    const double refresh_rate = get_display_refresh_rate();
     if (!refresh_rate)
     {
         std::cerr << "Invalid refresh rate." << '\n';
         return 1;
     }
 
-    double percent_fps = five_percent_limit(refresh_rate);
-    double reflex_fps = reflex_formula_limit(refresh_rate);
-    double optimal_fps = vrr_formula_limit(reflex_fps);
+    const double percent_fps = five_percent_limit(refresh_rate);
+    const double reflex_fps = reflex_formula_limit(refresh_rate);
+    const double optimal_fps = vrr_formula_limit(reflex_fps);
 
     std::cout << std::fixed << std::setprecision(3) << std::right;
 
-    std::array<int, 4> width = {22, 16, 14, 21};
+    const std::array<int, 4> width = {22, 16, 14, 21};
 
     std::cout << "\n";
     std::cout << std::setw(width[0]) << "Limit type |";
