@@ -13,6 +13,11 @@ double get_display_refresh_rate()
     return refresh_rate;
 }
 
+double five_percent_limit(double refresh_rate)
+{
+    return refresh_rate * 0.95;
+}
+
 double reflex_formula_limit(double refresh_rate)
 {
     return refresh_rate - (refresh_rate * refresh_rate) / 3600.0;
@@ -41,6 +46,7 @@ int main()
         return 1;
     }
 
+    double percent_fps = five_percent_limit(refresh_rate);
     double reflex_fps = reflex_formula_limit(refresh_rate);
     double optimal_fps = vrr_formula_limit(reflex_fps);
 
@@ -61,6 +67,7 @@ int main()
     std::cout << std::string(width[3] - 1, '-') << "+";
     std::cout << '\n';
 
+    print_row("5% Percent limit", percent_fps, width);
     print_row("Reflex formula limit", reflex_fps, width);
     print_row("Special K VRR limit", optimal_fps, width);
 
