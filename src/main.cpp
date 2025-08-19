@@ -18,6 +18,11 @@ double reflex_formula_limit(double refresh_rate)
     return refresh_rate - (refresh_rate * refresh_rate) / 3600.0;
 }
 
+double vrr_formula_limit(double reflex_fps)
+{
+    return reflex_fps * 0.995;
+}
+
 void print_row(std::string label, double value, std::array<int, 4> width)
 {
     std::cout << std::setw(width[0]) << (label + " |");
@@ -37,6 +42,7 @@ int main()
     }
 
     double reflex_fps = reflex_formula_limit(refresh_rate);
+    double optimal_fps = vrr_formula_limit(reflex_fps);
 
     std::cout << std::fixed << std::setprecision(3) << std::right;
 
@@ -56,6 +62,7 @@ int main()
     std::cout << '\n';
 
     print_row("Reflex formula limit", reflex_fps, width);
+    print_row("Special K VRR limit", optimal_fps, width);
 
     return 0;
 }
