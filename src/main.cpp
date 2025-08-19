@@ -3,7 +3,56 @@
 #include <iomanip>
 #include <iostream>
 
-#include <windows.h>
+#include <dxgi.h>
+
+double get_dxgi_refresh_rate()
+{
+    IDXGIFactory *pFactory = nullptr;
+    if (FAILED(CreateDXGIFactory(__uuidof(IDXGIFactory), (void **)&pFactory)))
+    {
+        return 0.0;
+    }
+
+    IDXGIAdapter *pAdapter = nullptr;
+    if (FAILED(pFactory->EnumAdapters(0u, &pAdapter)))
+    {
+        pFactory->Release();
+        return 0.0;
+    }
+
+    IDXGIOutput *pOutput = nullptr;
+    if (FAILED(pAdapter->EnumOutputs(0u, &pOutput)))
+    {
+        pAdapter->Release();
+        pFactory->Release();
+        return 0.0;
+    }
+
+    DXGI_OUTPUT_DESC outputDesc;
+    pOutput->GetDesc(&outputDesc);
+
+    DXGI_MODE_DESC targetMode;
+    targetMode.Width = outputDesc.DesktopCoordinates.right - outputDesc.DesktopCoordinates.left;
+    targetMode.Height = outputDesc.DesktopCoordinates.bottom - outputDesc.DesktopCoordinates.top;
+    targetMode.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    targetMode.RefreshRate.Numerator = 0u;
+    targetMode.RefreshRate.Denominator = 0u;
+    targetMode.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+    targetMode.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+    DXGI_MODE_DESC closestMatch;
+    pOutput->FindClosestMatchingMode(&targetMode, &closestMatch, nullptr);
+
+    pOutput->Release();
+    pAdapter->Release();
+    pFactory->Release();
+
+    const double numerator = static_cast<double>(closestMatch.RefreshRate.Numerator);
+    const double denominator = static_cast<double>(closestMatch.RefreshRate.Denominator);
+    const double refresh_rate = numerator / denominator;
+
+    return refresh_rate;
+}
 
 double get_gdi_refresh_rate()
 {
@@ -19,7 +68,13 @@ double get_gdi_refresh_rate()
 
 double get_display_refresh_rate()
 {
-    double refresh_rate = get_gdi_refresh_rate();
+    double refresh_rate = get_dxgi_refresh_rate();
+    if (refresh_rate)
+    {
+        return refresh_rate;
+    }
+
+    refresh_rate = get_gdi_refresh_rate();
     if (refresh_rate)
     {
         return refresh_rate;
