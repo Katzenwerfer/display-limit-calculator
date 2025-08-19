@@ -3,14 +3,29 @@
 #include <iomanip>
 #include <iostream>
 
+#include <windows.h>
+
+double get_gdi_refresh_rate()
+{
+    DEVMODE devMode;
+    ZeroMemory(&devMode, sizeof(devMode));
+    devMode.dmSize = sizeof(devMode);
+    if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode))
+    {
+        return static_cast<double>(devMode.dmDisplayFrequency);
+    }
+    return 0.0;
+}
+
 double get_display_refresh_rate()
 {
-    std::cout << "Refresh rate: ";
+    double refresh_rate = get_gdi_refresh_rate();
+    if (refresh_rate)
+    {
+        return refresh_rate;
+    }
 
-    double refresh_rate;
-    std::cin >> refresh_rate;
-
-    return refresh_rate;
+    return 0.0;
 }
 
 constexpr double five_percent_limit(const double &refresh_rate)
@@ -42,7 +57,7 @@ int main()
     const double refresh_rate = get_display_refresh_rate();
     if (!refresh_rate)
     {
-        std::cerr << "Invalid refresh rate." << '\n';
+        std::cerr << "Couldn't find display's refresh rate." << '\n';
         return 1;
     }
 
@@ -50,7 +65,11 @@ int main()
     const double reflex_fps = reflex_formula_limit(refresh_rate);
     const double optimal_fps = vrr_formula_limit(reflex_fps);
 
-    std::cout << std::fixed << std::setprecision(3) << std::right;
+    std::cout << std::fixed << std::setprecision(3);
+
+    std::cout << "Detected display refresh rate: " << refresh_rate << " Hz\n";
+
+    std::cout << std::right;
 
     const std::array<int, 4> width = {22, 16, 14, 21};
 
