@@ -49,9 +49,7 @@ double get_dxgi_refresh_rate()
 
     const double numerator = static_cast<double>(closestMatch.RefreshRate.Numerator);
     const double denominator = static_cast<double>(closestMatch.RefreshRate.Denominator);
-    const double refresh_rate = numerator / denominator;
-
-    return refresh_rate;
+    return numerator / denominator;
 }
 
 double get_gdi_refresh_rate()
