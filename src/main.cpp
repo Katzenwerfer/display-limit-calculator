@@ -44,7 +44,13 @@ double get_dxgi_refresh_rate()
     }
 
     DXGI_OUTPUT_DESC outputDesc;
-    pOutput->GetDesc(&outputDesc);
+    if (FAILED(pOutput->GetDesc(&outputDesc)))
+    {
+        pOutput->Release();
+        pAdapter->Release();
+        pFactory->Release();
+        return 0.0;
+    }
 
     DXGI_MODE_DESC targetMode;
     targetMode.Width = outputDesc.DesktopCoordinates.right - outputDesc.DesktopCoordinates.left;
@@ -64,6 +70,12 @@ double get_dxgi_refresh_rate()
 
     const double numerator = static_cast<double>(closestMatch.RefreshRate.Numerator);
     const double denominator = static_cast<double>(closestMatch.RefreshRate.Denominator);
+
+    if (!denominator)
+    {
+        return 0.0;
+    }
+
     return numerator / denominator;
 }
 
