@@ -66,7 +66,7 @@ double get_gdi_refresh_rate()
     return 0.0;
 }
 
-double get_display_refresh_rate()
+double query_display_refresh_rate()
 {
     double refresh_rate = get_dxgi_refresh_rate();
     if (refresh_rate)
@@ -109,7 +109,7 @@ void print_row(const std::string &label, const double &value, const std::array<i
 
 int main()
 {
-    const double refresh_rate = get_display_refresh_rate();
+    const double refresh_rate = query_display_refresh_rate();
     if (!refresh_rate)
     {
         std::cerr << "Couldn't find display's refresh rate." << '\n';
