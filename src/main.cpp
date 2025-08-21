@@ -2,8 +2,23 @@
 #include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <vector>
 
 #include <dxgi.h>
+
+double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
+{
+    if (argument_vector[1] != "-c")
+    {
+        return 0.0;
+    }
+    return std::stod(argument_vector[2]);
+}
+
+std::vector<std::string> argument_handler(const int &argc, const char *argv[])
+{
+    return std::vector<std::string>(argv, argv + argc);
+}
 
 double get_dxgi_refresh_rate()
 {
@@ -105,13 +120,28 @@ void print_row(const std::string &label, const double &value, const std::array<i
     std::cout << '\n';
 }
 
-int main()
+int main(const int argc, const char *argv[])
 {
-    const double refresh_rate = query_display_refresh_rate();
-    if (!refresh_rate)
+    std::vector<std::string> argument_vector = argument_handler(argc, argv);
+
+    double refresh_rate;
+    if (argc > 2)
     {
-        std::cerr << "Couldn't find display's refresh rate." << '\n';
-        return 1;
+        refresh_rate = custom_display_refresh_rate(argument_vector);
+        if (!refresh_rate)
+        {
+            std::cerr << "Invalid refresh rate." << '\n';
+            return 1;
+        }
+    }
+    else
+    {
+        refresh_rate = query_display_refresh_rate();
+        if (!refresh_rate)
+        {
+            std::cerr << "Couldn't find display's refresh rate." << '\n';
+            return 1;
+        }
     }
 
     const double percent_fps = five_percent_limit(refresh_rate);
@@ -120,7 +150,7 @@ int main()
 
     std::cout << std::fixed << std::setprecision(3);
 
-    std::cout << "Detected display refresh rate: " << refresh_rate << " Hz\n";
+    std::cout << "Display refresh rate: " << refresh_rate << " Hz\n";
 
     std::cout << std::right;
 
