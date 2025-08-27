@@ -6,6 +6,8 @@
 
 #include <dxgi.h>
 
+const std::array<int, 4> column_width = {22, 16, 14, 21};
+
 double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
 {
     if (argument_vector[1] != "-c")
@@ -123,12 +125,12 @@ constexpr double vrr_formula_limit(const double &reflex_fps)
     return reflex_fps * 0.995;
 }
 
-void print_row(const std::string &label, const double &value, const std::array<int, 4> &width)
+void print_row(const std::string &label, const double &value)
 {
-    std::cout << std::setw(width[0]) << (label + " |");
-    std::cout << std::setw(width[1] - 2) << static_cast<int>(value) << " |";
-    std::cout << std::setw(width[2] - 2) << static_cast<int>(std::round(value)) << " |";
-    std::cout << std::setw(width[3] - 2) << value << " |";
+    std::cout << std::setw(column_width[0]) << (label + " |");
+    std::cout << std::setw(column_width[1] - 2) << static_cast<int>(value) << " |";
+    std::cout << std::setw(column_width[2] - 2) << static_cast<int>(std::round(value)) << " |";
+    std::cout << std::setw(column_width[3] - 2) << value << " |";
     std::cout << '\n';
 }
 
@@ -166,24 +168,22 @@ int main(const int argc, const char *argv[])
 
     std::cout << std::right;
 
-    const std::array<int, 4> width = {22, 16, 14, 21};
-
     std::cout << "\n";
-    std::cout << std::setw(width[0]) << "Limit type |";
-    std::cout << std::setw(width[1]) << "Truncated FPS |";
-    std::cout << std::setw(width[2]) << "Rounded FPS |";
-    std::cout << std::setw(width[3]) << "Floating-point FPS |";
+    std::cout << std::setw(column_width[0]) << "Limit type |";
+    std::cout << std::setw(column_width[1]) << "Truncated FPS |";
+    std::cout << std::setw(column_width[2]) << "Rounded FPS |";
+    std::cout << std::setw(column_width[3]) << "Floating-point FPS |";
     std::cout << '\n';
 
-    std::cout << std::string(width[0] - 1, '-') << "+";
-    std::cout << std::string(width[1] - 1, '-') << "+";
-    std::cout << std::string(width[2] - 1, '-') << "+";
-    std::cout << std::string(width[3] - 1, '-') << "+";
+    std::cout << std::string(column_width[0] - 1, '-') << "+";
+    std::cout << std::string(column_width[1] - 1, '-') << "+";
+    std::cout << std::string(column_width[2] - 1, '-') << "+";
+    std::cout << std::string(column_width[3] - 1, '-') << "+";
     std::cout << '\n';
 
-    print_row("5% Percent limit", percent_fps, width);
-    print_row("Reflex formula limit", reflex_fps, width);
-    print_row("Special K VRR limit", optimal_fps, width);
+    print_row("5% Percent limit", percent_fps);
+    print_row("Reflex formula limit", reflex_fps);
+    print_row("Special K VRR limit", optimal_fps);
 
     return 0;
 }
