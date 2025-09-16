@@ -6,7 +6,7 @@
 
 #include <dxgi.h>
 
-const std::array<int, 4> column_width = {20, 14, 12, 19};
+const std::array<int, 4> column_width{{20, 14, 12, 19}};
 
 double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
 {
@@ -19,25 +19,25 @@ double custom_display_refresh_rate(const std::vector<std::string> &argument_vect
 
 std::vector<std::string> argument_handler(const int &argc, const char *argv[])
 {
-    return std::vector<std::string>(argv, argv + argc);
+    return {argv, argv + argc};
 }
 
 double get_dxgi_refresh_rate()
 {
-    IDXGIFactory *pFactory = nullptr;
+    IDXGIFactory *pFactory{};
     if (FAILED(CreateDXGIFactory(__uuidof(IDXGIFactory), (void **)&pFactory)))
     {
         return 0.0;
     }
 
-    IDXGIAdapter *pAdapter = nullptr;
+    IDXGIAdapter *pAdapter{};
     if (FAILED(pFactory->EnumAdapters(0u, &pAdapter)))
     {
         pFactory->Release();
         return 0.0;
     }
 
-    IDXGIOutput *pOutput = nullptr;
+    IDXGIOutput *pOutput{};
     if (FAILED(pAdapter->EnumOutputs(0u, &pOutput)))
     {
         pAdapter->Release();
@@ -45,7 +45,7 @@ double get_dxgi_refresh_rate()
         return 0.0;
     }
 
-    DXGI_OUTPUT_DESC outputDesc;
+    DXGI_OUTPUT_DESC outputDesc{};
     if (FAILED(pOutput->GetDesc(&outputDesc)))
     {
         pOutput->Release();
@@ -54,7 +54,7 @@ double get_dxgi_refresh_rate()
         return 0.0;
     }
 
-    DXGI_MODE_DESC targetMode;
+    DXGI_MODE_DESC targetMode{};
     targetMode.Width = outputDesc.DesktopCoordinates.right - outputDesc.DesktopCoordinates.left;
     targetMode.Height = outputDesc.DesktopCoordinates.bottom - outputDesc.DesktopCoordinates.top;
     targetMode.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -63,15 +63,15 @@ double get_dxgi_refresh_rate()
     targetMode.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     targetMode.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
-    DXGI_MODE_DESC closestMatch;
+    DXGI_MODE_DESC closestMatch{};
     pOutput->FindClosestMatchingMode(&targetMode, &closestMatch, nullptr);
 
     pOutput->Release();
     pAdapter->Release();
     pFactory->Release();
 
-    const double numerator = static_cast<double>(closestMatch.RefreshRate.Numerator);
-    const double denominator = static_cast<double>(closestMatch.RefreshRate.Denominator);
+    const double numerator{static_cast<double>(closestMatch.RefreshRate.Numerator)};
+    const double denominator{static_cast<double>(closestMatch.RefreshRate.Denominator)};
 
     if (!denominator)
     {
@@ -83,7 +83,7 @@ double get_dxgi_refresh_rate()
 
 double get_gdi_refresh_rate()
 {
-    DEVMODE devMode;
+    DEVMODE devMode{};
     ZeroMemory(&devMode, sizeof(devMode));
     devMode.dmSize = sizeof(devMode);
     if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode))
@@ -95,7 +95,9 @@ double get_gdi_refresh_rate()
 
 double query_display_refresh_rate()
 {
-    double refresh_rate = get_dxgi_refresh_rate();
+    double refresh_rate{};
+
+    refresh_rate = get_dxgi_refresh_rate();
     if (refresh_rate)
     {
         return refresh_rate;
@@ -136,9 +138,9 @@ void print_row(const std::string &label, const double &value)
 
 int main(const int argc, const char *argv[])
 {
-    std::vector<std::string> argument_vector = argument_handler(argc, argv);
+    std::vector<std::string> argument_vector{argument_handler(argc, argv)};
 
-    double refresh_rate;
+    double refresh_rate{};
     if (argc > 2)
     {
         refresh_rate = custom_display_refresh_rate(argument_vector);
@@ -158,9 +160,9 @@ int main(const int argc, const char *argv[])
         }
     }
 
-    const double percent_fps = five_percent_limit(refresh_rate);
-    const double reflex_fps = reflex_formula_limit(refresh_rate);
-    const double optimal_fps = vrr_formula_limit(reflex_fps);
+    const double percent_fps{five_percent_limit(refresh_rate)};
+    const double reflex_fps{reflex_formula_limit(refresh_rate)};
+    const double optimal_fps{vrr_formula_limit(reflex_fps)};
 
     std::cout << std::fixed << std::setprecision(3);
 
