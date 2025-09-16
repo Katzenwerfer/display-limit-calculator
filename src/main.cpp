@@ -2,9 +2,11 @@
 #include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include <dxgi.h>
+#include <wingdi.h>
 
 const std::array<int, 4> column_width{{20, 14, 12, 19}};
 
