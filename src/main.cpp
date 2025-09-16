@@ -8,7 +8,7 @@
 #include <dxgi.h>
 #include <wingdi.h>
 
-const std::array<int, 4> column_width{{20, 14, 12, 19}};
+constexpr std::array<int, 4> column_width{{20, 14, 12, 19}};
 
 double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
 {
@@ -19,7 +19,7 @@ double custom_display_refresh_rate(const std::vector<std::string> &argument_vect
     return std::stod(argument_vector[2]);
 }
 
-std::vector<std::string> argument_handler(const int &argc, const char *argv[])
+std::vector<std::string> argument_handler(const int &argc, const char *const argv[])
 {
     return {argv, argv + argc};
 }
@@ -138,13 +138,13 @@ void print_row(const std::string &label, const double &value)
     std::cout << '\n';
 }
 
-int main(const int argc, const char *argv[])
+int main(const int argc, const char *const argv[])
 {
-    std::vector<std::string> argument_vector{argument_handler(argc, argv)};
 
     double refresh_rate{};
     if (argc > 2)
     {
+        std::vector<std::string> argument_vector{argument_handler(argc, argv)};
         refresh_rate = custom_display_refresh_rate(argument_vector);
         if (!refresh_rate)
         {
