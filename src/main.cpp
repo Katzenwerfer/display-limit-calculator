@@ -198,7 +198,7 @@ int main(const int argc, const char *const argv[])
     const double reflex_4096_fps(reflex_formula_limit_4096(refresh_rate));
     const double optimal_4096_fps(vrr_formula_limit_4096(reflex_4096_fps));
 
-    std::cout << std::fixed << std::setprecision(3);
+    std::cout << std::fixed << std::setprecision(6);
 
     std::cout << "Display refresh rate: " << refresh_rate << " Hz\n";
 
