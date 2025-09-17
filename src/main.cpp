@@ -8,7 +8,7 @@
 #include <dxgi.h>
 #include <wingdi.h>
 
-constexpr std::array<int, 4> column_width{{20, 14, 12, 19}};
+constexpr std::array<int, 4> column_width{{27, 14, 12, 19}};
 
 double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
 {
@@ -119,14 +119,24 @@ constexpr double five_percent_limit(const double &refresh_rate)
     return refresh_rate * 0.95;
 }
 
-constexpr double reflex_formula_limit(const double &refresh_rate)
+constexpr double reflex_formula_limit_3600(const double &refresh_rate)
 {
     return refresh_rate - (refresh_rate * refresh_rate) / 3600.0;
 }
 
-constexpr double vrr_formula_limit(const double &reflex_fps)
+constexpr double vrr_formula_limit_3600(const double &reflex_fps)
 {
     return reflex_fps * 0.995;
+}
+
+constexpr double reflex_formula_limit_4096(const double &refresh_rate)
+{
+    return refresh_rate - (refresh_rate * refresh_rate) / 4096.0;
+}
+
+constexpr double vrr_formula_limit_4096(const double &alt_reflex_fps)
+{
+    return alt_reflex_fps * 0.995;
 }
 
 void print_row_title()
@@ -181,8 +191,12 @@ int main(const int argc, const char *const argv[])
     }
 
     const double percent_fps{five_percent_limit(refresh_rate)};
-    const double reflex_fps{reflex_formula_limit(refresh_rate)};
-    const double optimal_fps{vrr_formula_limit(reflex_fps)};
+
+    const double reflex_3600_fps{reflex_formula_limit_3600(refresh_rate)};
+    const double optimal_3600_fps{vrr_formula_limit_3600(reflex_3600_fps)};
+
+    const double reflex_4096_fps(reflex_formula_limit_4096(refresh_rate));
+    const double optimal_4096_fps(vrr_formula_limit_4096(reflex_4096_fps));
 
     std::cout << std::fixed << std::setprecision(3);
 
@@ -198,8 +212,12 @@ int main(const int argc, const char *const argv[])
     print_row_data("5% Percent limit", percent_fps);
     print_row_separator();
 
-    print_row_data("Reflex formula limit", reflex_fps);
-    print_row_data("Special K VRR limit", optimal_fps);
+    print_row_data("Reflex formula limit [3600]", reflex_3600_fps);
+    print_row_data("Special K VRR limit [3600]", optimal_3600_fps);
+    print_row_separator();
+
+    print_row_data("Reflex formula limit [4096]", reflex_4096_fps);
+    print_row_data("Special K VRR limit [4096]", optimal_3600_fps);
     print_row_separator();
 
     return 0;
