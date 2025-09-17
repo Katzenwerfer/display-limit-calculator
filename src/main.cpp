@@ -129,7 +129,25 @@ constexpr double vrr_formula_limit(const double &reflex_fps)
     return reflex_fps * 0.995;
 }
 
-void print_row(const std::string &label, const double &value)
+void print_row_title()
+{
+    std::cout << std::setw(column_width[0]) << "Limit type" << " |";
+    std::cout << std::setw(column_width[1]) << "Truncated FPS" << " |";
+    std::cout << std::setw(column_width[2]) << "Rounded FPS" << " |";
+    std::cout << std::setw(column_width[3]) << "Floating-point FPS" << " |";
+    std::cout << '\n';
+}
+
+void print_row_separator()
+{
+    std::cout << std::string(column_width[0] + 1, '-') << "+";
+    std::cout << std::string(column_width[1] + 1, '-') << "+";
+    std::cout << std::string(column_width[2] + 1, '-') << "+";
+    std::cout << std::string(column_width[3] + 1, '-') << "+";
+    std::cout << '\n';
+}
+
+void print_row_data(const std::string &label, const double &value)
 {
     std::cout << std::setw(column_width[0]) << label << " |";
     std::cout << std::setw(column_width[1]) << static_cast<int>(value) << " |";
@@ -172,22 +190,17 @@ int main(const int argc, const char *const argv[])
 
     std::cout << std::right;
 
-    std::cout << "\n";
-    std::cout << std::setw(column_width[0]) << "Limit type" << " |";
-    std::cout << std::setw(column_width[1]) << "Truncated FPS" << " |";
-    std::cout << std::setw(column_width[2]) << "Rounded FPS" << " |";
-    std::cout << std::setw(column_width[3]) << "Floating-point FPS" << " |";
-    std::cout << '\n';
+    print_row_separator();
 
-    std::cout << std::string(column_width[0] + 1, '-') << "+";
-    std::cout << std::string(column_width[1] + 1, '-') << "+";
-    std::cout << std::string(column_width[2] + 1, '-') << "+";
-    std::cout << std::string(column_width[3] + 1, '-') << "+";
-    std::cout << '\n';
+    print_row_title();
+    print_row_separator();
 
-    print_row("5% Percent limit", percent_fps);
-    print_row("Reflex formula limit", reflex_fps);
-    print_row("Special K VRR limit", optimal_fps);
+    print_row_data("5% Percent limit", percent_fps);
+    print_row_separator();
+
+    print_row_data("Reflex formula limit", reflex_fps);
+    print_row_data("Special K VRR limit", optimal_fps);
+    print_row_separator();
 
     return 0;
 }
