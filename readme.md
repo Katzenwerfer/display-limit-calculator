@@ -2,8 +2,16 @@
 
 A very basic program that calculates framerate limits based on your display's refresh rate.
 
-It includes the following limits:
+## How to use it?
+
+Run it in a terminal to display a table with various limits calculated using varius formulas.
 
 - 5% of refresh rate
 - Special K's NVIDIA Reflex formula
 - Special K's VRR formula
+
+## Custom refresh rate?
+
+You can display the limits for a custom refresh rate using the `-c` parameter.
+
+`display-limit-calculator.exe -c [refresh rate]`
