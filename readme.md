@@ -4,7 +4,7 @@ A very basic program that calculates framerate limits based on your display's re
 
 ## How to use it?
 
-Run it in a terminal to display a table with various limits calculated using varius formulas.
+Run it in a terminal to display a table with various limits calculated using various formulas.
 
 - 5% of refresh rate
 - Special K's NVIDIA Reflex formula
