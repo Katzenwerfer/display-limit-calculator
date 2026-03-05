@@ -217,7 +217,7 @@ int main(const int argc, const char *const argv[])
     print_row_separator();
 
     print_row_data("Reflex formula limit [4096]", reflex_4096_fps);
-    print_row_data("Special K VRR limit [4096]", optimal_3600_fps);
+    print_row_data("Special K VRR limit [4096]", optimal_4096_fps);
     print_row_separator();
 
     return 0;
