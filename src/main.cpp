@@ -114,7 +114,7 @@ double query_display_refresh_rate()
     return 0.0;
 }
 
-constexpr double five_percent_limit(const double &refresh_rate)
+constexpr double rtss_percent_limit(const double &refresh_rate)
 {
     return refresh_rate * 0.95;
 }
@@ -180,7 +180,7 @@ int main(const int argc, const char *const argv[])
         }
     }
 
-    const double percent_fps{five_percent_limit(refresh_rate)};
+    const double rtss_percent_fps{rtss_percent_limit(refresh_rate)};
 
     const double reflex_3600_fps{reflex_formula_limit_3600(refresh_rate)};
     const double optimal_3600_fps{vrr_formula_limit_3600(reflex_3600_fps)};
@@ -196,7 +196,7 @@ int main(const int argc, const char *const argv[])
     print_row_title();
     print_row_separator();
 
-    print_row_data("5% Percent limit", percent_fps);
+    print_row_data("RTSS percent limit", rtss_percent_fps);
     print_row_separator();
 
     print_row_data("Reflex formula limit [3600]", reflex_3600_fps);
