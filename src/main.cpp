@@ -18,11 +18,6 @@ double custom_display_refresh_rate(const std::vector<std::string> &argument_vect
     return std::stod(argument_vector[2]);
 }
 
-std::vector<std::string> argument_handler(const int &argc, const char *const argv[])
-{
-    return {argv, argv + argc};
-}
-
 double get_dxgi_refresh_rate()
 {
     IDXGIFactory *pFactory{};
@@ -163,11 +158,10 @@ int main(const int argc, const char *const argv[])
 {
 
     double refresh_rate{};
-    if (argc > 2)
+    if (argc > 2 && std::string_view(argv[1]) == "-c")
     {
-        std::vector<std::string> argument_vector{argument_handler(argc, argv)};
-        refresh_rate = custom_display_refresh_rate(argument_vector);
-        if (!refresh_rate)
+        refresh_rate = std::stod(argv[2]);
+        if (refresh_rate <= 0)
         {
             std::cerr << "Invalid refresh rate." << '\n';
             return 1;
