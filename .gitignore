@@ -1,5 +1,1 @@
-.build/main.exe
-.vscode/c_cpp_properties.json
-.vscode/launch.json
-.vscode/settings.json
-.vscode/tasks.json
+.*/
