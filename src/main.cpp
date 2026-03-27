@@ -129,16 +129,6 @@ constexpr double vrr_formula_limit_3600(const double &reflex_fps)
     return reflex_fps * 0.995;
 }
 
-constexpr double reflex_formula_limit_4096(const double &refresh_rate)
-{
-    return refresh_rate - (refresh_rate * refresh_rate) / 4096.0;
-}
-
-constexpr double vrr_formula_limit_4096(const double &alt_reflex_fps)
-{
-    return alt_reflex_fps * 0.995;
-}
-
 void print_row_title()
 {
     std::cout << std::setw(column_width[0]) << "Limit type" << " |";
@@ -195,9 +185,6 @@ int main(const int argc, const char *const argv[])
     const double reflex_3600_fps{reflex_formula_limit_3600(refresh_rate)};
     const double optimal_3600_fps{vrr_formula_limit_3600(reflex_3600_fps)};
 
-    const double reflex_4096_fps(reflex_formula_limit_4096(refresh_rate));
-    const double optimal_4096_fps(vrr_formula_limit_4096(reflex_4096_fps));
-
     std::cout << std::fixed << std::setprecision(6);
 
     std::cout << "Display refresh rate: " << refresh_rate << " Hz\n";
@@ -214,10 +201,6 @@ int main(const int argc, const char *const argv[])
 
     print_row_data("Reflex formula limit [3600]", reflex_3600_fps);
     print_row_data("Special K VRR limit [3600]", optimal_3600_fps);
-    print_row_separator();
-
-    print_row_data("Reflex formula limit [4096]", reflex_4096_fps);
-    print_row_data("Special K VRR limit [4096]", optimal_4096_fps);
     print_row_separator();
 
     return 0;
