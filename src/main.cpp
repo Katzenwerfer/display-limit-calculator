@@ -6,7 +6,6 @@
 #include <vector>
 
 #include <dxgi.h>
-#include <wingdi.h>
 
 constexpr std::array<int, 4> column_width{{19, 14, 12, 19}};
 
@@ -86,7 +85,6 @@ double get_dxgi_refresh_rate()
 double get_gdi_refresh_rate()
 {
     DEVMODE devMode{};
-    ZeroMemory(&devMode, sizeof(devMode));
     devMode.dmSize = sizeof(devMode);
     if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode))
     {
