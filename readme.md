@@ -8,7 +8,7 @@ Run it in a terminal to display a table with various limits calculated using var
 
 - RTSS' 5% of refresh rate
 - Special K's NVIDIA Reflex formula
-- Special K's VRR formula
+- Special K's VRR formula (old and new)
 
 ## Custom refresh rate?
 

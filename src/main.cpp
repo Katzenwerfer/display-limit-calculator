@@ -124,9 +124,14 @@ constexpr double sk_reflex_formula_limit(const double &refresh_rate)
     return refresh_rate - (refresh_rate * refresh_rate) / 3600.0;
 }
 
-constexpr double sk_vrr_formula_limit(const double &reflex_fps)
+constexpr double sk_old_vrr_formula_limit(const double &reflex_fps)
 {
     return reflex_fps * 0.995;
+}
+
+constexpr double sk_new_vrr_formula_limit(const double &reflex_fps)
+{
+    return reflex_fps * 0.990;
 }
 
 void print_row_title()
@@ -183,7 +188,8 @@ int main(const int argc, const char *const argv[])
     const double rtss_percent_fps{rtss_percent_limit(refresh_rate)};
 
     const double sk_reflex_fps{sk_reflex_formula_limit(refresh_rate)};
-    const double sk_vrr_fps{sk_vrr_formula_limit(sk_reflex_fps)};
+    const double sk_old_vrr_fps{sk_old_vrr_formula_limit(sk_reflex_fps)};
+    const double sk_new_vrr_fps{sk_new_vrr_formula_limit(sk_reflex_fps)};
 
     std::cout << std::fixed << std::setprecision(6);
 
@@ -200,7 +206,8 @@ int main(const int argc, const char *const argv[])
     print_row_separator();
 
     print_row_data("SK Reflex limit", sk_reflex_fps);
-    print_row_data("SK VRR limit", sk_vrr_fps);
+    print_row_data("SK VRR limit [old]", sk_old_vrr_fps);
+    print_row_data("SK VRR limit [new]", sk_new_vrr_fps);
     print_row_separator();
 
     return 0;
