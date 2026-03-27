@@ -8,7 +8,7 @@
 #include <dxgi.h>
 #include <wingdi.h>
 
-constexpr std::array<int, 4> column_width{{27, 14, 12, 19}};
+constexpr std::array<int, 4> column_width{{19, 14, 12, 19}};
 
 double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
 {
