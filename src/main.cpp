@@ -7,7 +7,7 @@
 
 #include <dxgi.h>
 
-constexpr std::array<int, 4> column_width{{20, 14, 12, 19}};
+constexpr std::array<int, 4> column_width{{21, 14, 12, 19}};
 
 double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
 {
@@ -127,6 +127,11 @@ constexpr double sk_vrr_formula_v2_limit(const double &reflex_fps)
     return reflex_fps * 0.990;
 }
 
+constexpr double sk_vrr_formula_v3_limit(const double &reflex_fps)
+{
+    return reflex_fps - 0.005 * reflex_fps - 0.0015f;
+}
+
 void print_row_title()
 {
     std::cout << std::setw(column_width[0]) << "Limit type" << " |";
@@ -182,6 +187,7 @@ int main(const int argc, const char *const argv[])
     const double sk_reflex_fps{sk_reflex_formula_limit(refresh_rate)};
     const double sk_vrr_v1_fps{sk_vrr_formula_v1_limit(sk_reflex_fps)};
     const double sk_vrr_v2_fps{sk_vrr_formula_v2_limit(sk_reflex_fps)};
+    const double sk_vrr_v3_fps{sk_vrr_formula_v3_limit(sk_reflex_fps)};
 
     std::cout << std::fixed << std::setprecision(6);
 
@@ -200,6 +206,7 @@ int main(const int argc, const char *const argv[])
     print_row_data("SK Reflex limit", sk_reflex_fps);
     print_row_data("SK VRR limit [0.5%]", sk_vrr_v1_fps);
     print_row_data("SK VRR limit [1%]", sk_vrr_v2_fps);
+    print_row_data("SK VRR limit [~0.5%]", sk_vrr_v3_fps);
     print_row_separator();
 
     return 0;
