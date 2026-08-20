@@ -7,7 +7,7 @@
 
 #include <dxgi.h>
 
-constexpr std::array<int, 4> column_width{{19, 14, 12, 19}};
+constexpr std::array<int, 4> column_width{{20, 14, 12, 19}};
 
 double custom_display_refresh_rate(const std::vector<std::string> &argument_vector)
 {
@@ -107,7 +107,7 @@ double query_display_refresh_rate()
     return 0.0;
 }
 
-constexpr double rtss_percent_limit(const double &refresh_rate)
+constexpr double rtss_vrr_limit(const double &refresh_rate)
 {
     return refresh_rate * 0.95;
 }
@@ -117,12 +117,12 @@ constexpr double sk_reflex_formula_limit(const double &refresh_rate)
     return refresh_rate - (refresh_rate * refresh_rate) / 3600.0;
 }
 
-constexpr double sk_old_vrr_formula_limit(const double &reflex_fps)
+constexpr double sk_vrr_formula_v1_limit(const double &reflex_fps)
 {
     return reflex_fps * 0.995;
 }
 
-constexpr double sk_new_vrr_formula_limit(const double &reflex_fps)
+constexpr double sk_vrr_formula_v2_limit(const double &reflex_fps)
 {
     return reflex_fps * 0.990;
 }
@@ -177,11 +177,11 @@ int main(const int argc, const char *const argv[])
         }
     }
 
-    const double rtss_percent_fps{rtss_percent_limit(refresh_rate)};
+    const double rtss_vrr_fps{rtss_vrr_limit(refresh_rate)};
 
     const double sk_reflex_fps{sk_reflex_formula_limit(refresh_rate)};
-    const double sk_old_vrr_fps{sk_old_vrr_formula_limit(sk_reflex_fps)};
-    const double sk_new_vrr_fps{sk_new_vrr_formula_limit(sk_reflex_fps)};
+    const double sk_vrr_v1_fps{sk_vrr_formula_v1_limit(sk_reflex_fps)};
+    const double sk_vrr_v2_fps{sk_vrr_formula_v2_limit(sk_reflex_fps)};
 
     std::cout << std::fixed << std::setprecision(6);
 
@@ -194,12 +194,12 @@ int main(const int argc, const char *const argv[])
     print_row_title();
     print_row_separator();
 
-    print_row_data("RTSS percent limit", rtss_percent_fps);
+    print_row_data("RTSS VRR limit [5%]", rtss_vrr_fps);
     print_row_separator();
 
     print_row_data("SK Reflex limit", sk_reflex_fps);
-    print_row_data("SK VRR limit [old]", sk_old_vrr_fps);
-    print_row_data("SK VRR limit [new]", sk_new_vrr_fps);
+    print_row_data("SK VRR limit [0.5%]", sk_vrr_v1_fps);
+    print_row_data("SK VRR limit [1%]", sk_vrr_v2_fps);
     print_row_separator();
 
     return 0;
